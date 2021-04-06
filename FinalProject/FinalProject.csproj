@@ -110,5 +110,50 @@
   <ItemGroup>
     <None Include="Resources\imageedit_0_8988558386.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bulba1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\charma1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\squirtle1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pokemon Season 1 Music Burning Battle Feild.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pokémon Red  Blue Music Opening Theme.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pokemon %28A Button%29 - Sound Effect %28HD%29.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fightbut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fightbut1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\runbut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\runbut1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\runbut2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Potion_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Victory sound effect.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\453001__breviceps__pokemon-cry-parody.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
