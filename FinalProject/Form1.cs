@@ -11,25 +11,32 @@ using System.Threading;
 using System.Media;
 namespace FinalProject
 {
+    //Bilal Zeineddine
+    //April 7, 2021
+    //Pokemon battle simulator: Battle with Pokemon against the cpu!
     public partial class pokeForm : Form
     {
-
+        //Create strings for the pokemon that is chosen, later on these will be used to display the choice
         string pokemonChoice = "";
         string cpuPokemon = "";
+        //Create a soundplayer
         SoundPlayer pokeMusic;
+        //Random generators for the Cpu's decisions 
         Random randomPokemon = new Random();
         Random hitChance = new Random();
         int cpuChoice = 0;
 
+        //Health variables and the value of a critical hit
         double playerHealth = 500;
         double cpuHealth = 500;
-
         double criticalHit = 35;
 
+        //Create lists for each pokemon and the corresponding damage from Attack 1, 2 and 3
         List<int> bulbasaur = new List<int>(new int[] { 60, 100, 350 });
         List<int> charmander = new List<int>(new int[] { 60, 100, 350 });
-        List<int> squirtle = new List<int>(new int[] { 60, 100, 350});
+        List<int> squirtle = new List<int>(new int[] { 60, 100, 350 });
 
+        //The health bar that displays colour, the lower this gets the colour will correspond
         double player1HealthBar = 100;
         double cpuHealthBar = 100;
 
@@ -43,6 +50,7 @@ namespace FinalProject
         private void startButton_Click(object sender, EventArgs e)
         {
 
+            //The very start, play these noises, make certain labels visible, give player choice of 3 pokemons
             pokeMusic = new SoundPlayer(Properties.Resources.buttonClick);
             pokeMusic.Play();
             Thread.Sleep(400);
@@ -63,6 +71,7 @@ namespace FinalProject
 
         private void exitButton_Click(object sender, EventArgs e)
         {
+            //Exit the program
             pokeMusic = new SoundPlayer(Properties.Resources.buttonClick);
             pokeMusic.Play();
             Thread.Sleep(1500);
@@ -72,6 +81,7 @@ namespace FinalProject
 
         private void bulbasaurButton_Click(object sender, EventArgs e)
         {
+            //The player chooses bulbasaur, store it and display the corresponding bulbasaur pictures and labels. Switch to battle screen and present options.
             playerChoiceLabel.Text = "Bulbasaur";
             playerChoiceLabel.Visible = true;
             pokeMusic = new SoundPlayer(Properties.Resources.buttonClick);
@@ -101,6 +111,7 @@ namespace FinalProject
                 playerPokemonImage.BackgroundImage = Properties.Resources.bulba1;
             }
 
+            //Random generator to decide which of the 2 remaining pokemon the cpu chooses - it can not be the same as the one the player has chosen
             cpuChoice = randomPokemon.Next(1, 11);
             if (cpuChoice <= 5)
             {
@@ -122,7 +133,7 @@ namespace FinalProject
 
         private void charmanderButton_Click(object sender, EventArgs e)
         {
-
+            //The player chooses charmander, store it and display the corresponding charmander pictures and labels. Switch to battle screen and present options.
             playerChoiceLabel.Text = "Charmander";
             playerChoiceLabel.Visible = true;
             fightButton.Visible = true;
@@ -151,6 +162,7 @@ namespace FinalProject
 
             }
 
+            //Random generator to decide which of the 2 remaining pokemon the cpu chooses - it can not be the same as the one the player has chosen
             cpuChoice = randomPokemon.Next(1, 11);
             if (cpuChoice <= 5)
             {
@@ -172,6 +184,7 @@ namespace FinalProject
 
         private void squirtleButton_Click(object sender, EventArgs e)
         {
+            //The player chooses charmander, store it and display the corresponding charmander pictures and labels. Switch to battle screen and present options.
             playerChoiceLabel.Text = "Squirtle";
             playerChoiceLabel.Visible = true;
             fightButton.Visible = true;
@@ -198,7 +211,7 @@ namespace FinalProject
                 playerPokemonImage.Visible = true;
                 playerPokemonImage.BackgroundImage = Properties.Resources.squirtle1;
             }
-
+            //Random generator to decide which of the 2 remaining pokemon the cpu chooses - it can not be the same as the one the player has chosen
             cpuChoice = randomPokemon.Next(1, 11);
             if (cpuChoice <= 5)
             {
@@ -220,6 +233,7 @@ namespace FinalProject
 
         private void fightButton_Click(object sender, EventArgs e)
         {
+            //The fight button is clicked, giving the option of 3 attacks. 
             attack1Button.Visible = true;
             attack2Button.Visible = true;
             attack3Button.Visible = true;
@@ -233,7 +247,7 @@ namespace FinalProject
             potionBox.Visible = false;
             battleLabelDescription.Visible = false;
 
-
+            //Depending on the players choice, the attack labels will correspond to the pokemons traits.
             if (pokemonChoice == "charmander")
             {
                 attack1Button.Text = "Ember";
@@ -258,6 +272,9 @@ namespace FinalProject
 
         private void runButton_Click(object sender, EventArgs e)
         {
+            //Create a random generator to determine the success of fleeing - 75% chance of success, 15% chance of failing
+            //If succesfull, the player returns to the start screen
+            //If unsuccesfull, it becomes the cpu turn
             Random fleeChance = new Random();
             int chance = fleeChance.Next(1, 101);
             if (chance <= 75)
@@ -297,6 +314,7 @@ namespace FinalProject
 
         private void bagButton_Click(object sender, EventArgs e)
         {
+            //If the bag is clicked, give the option of using a potion.
             fightButton.Visible = true;
             runButton.Visible = true;
             bagButton.Visible = true;
@@ -313,6 +331,8 @@ namespace FinalProject
 
         public void startScreen()
         {
+            //The start screen. At the end of most situations, it returns to this screen. It disables all unneeded labels and pictures
+            //and allows player to have another battle or exit the program.
             this.BackgroundImage = Properties.Resources.pokemonStart1;
             pokeMusic = new SoundPlayer(Properties.Resources.opening);
             pokeMusic.Play();
@@ -343,6 +363,12 @@ namespace FinalProject
         }
         public void cpuTurn()
         {
+            //At the end of the player turn, it becomes the cpu turn. The cpu has a random chance of fighting, running, or using a potion
+            //If it fights, it again randomly chooses between the 3 attacks, with it likely choosing the lesser damaging ones to
+            //have equal game balance. If the cpu chooses to flee, it may be succesfull or may fail, similar to the players chances
+            //Lastly, if it uses a potion, an if statement checks if the cpu pokemon health is less than 500. If not, it displays a
+            //failure message and it becomes the players turn. If it is less than 500, the cpu pokemon gains 100 health points, 
+            //and if that exceeds 500, it will set the cpu pokemon health to 500.
             potionBox.Visible = false;
             fightButton.Visible = false;
             runButton.Visible = false;
@@ -352,7 +378,7 @@ namespace FinalProject
             Random cpuGen = new Random();
             int cpuDecision = cpuGen.Next(1, 101);
 
-            if (cpuDecision <= 60 && cpuPokemon == "charmander")
+            if (cpuDecision <= 50 && cpuPokemon == "charmander")
             {
                 playerHealth = playerHealth - charmander[0];
                 if (playerHealth < 0)
@@ -361,7 +387,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Ember and delt {charmander[0]} damage!";
             }
-            else if (cpuDecision > 60 && cpuDecision < 75 && cpuPokemon == "charmander")
+            else if (cpuDecision > 50 && cpuDecision < 70 && cpuPokemon == "charmander")
             {
                 playerHealth = playerHealth - charmander[1];
                 if (playerHealth < 0)
@@ -370,7 +396,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Flamethrower and delt {charmander[1]} damage!";
             }
-            else if (cpuDecision > 75 && cpuDecision < 81 && cpuPokemon == "charmander")
+            else if (cpuDecision >= 70 && cpuDecision < 81 && cpuPokemon == "charmander")
             {
                 playerHealth = playerHealth - charmander[2];
                 if (playerHealth < 0)
@@ -380,7 +406,7 @@ namespace FinalProject
                 battleLabelDescription.Text = $"The opponent used Heat Wave and delt {charmander[2]} damage!";
             }
 
-            else if (cpuDecision <= 60 && cpuPokemon == "bulbasaur")
+            else if (cpuDecision <= 50 && cpuPokemon == "bulbasaur")
             {
                 playerHealth = playerHealth - bulbasaur[0];
                 if (playerHealth < 0)
@@ -389,7 +415,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Scratch and delt {bulbasaur[0]} damage!";
             }
-            else if (cpuDecision > 60 && cpuDecision < 75 && cpuPokemon == "bulbasaur")
+            else if (cpuDecision > 50 && cpuDecision < 70 && cpuPokemon == "bulbasaur")
             {
                 playerHealth = playerHealth - bulbasaur[1];
                 if (playerHealth < 0)
@@ -398,7 +424,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Bullet Seed and delt {bulbasaur[1]} damage!";
             }
-            else if (cpuDecision >= 75 && cpuDecision < 81 && cpuPokemon == "bulbasaur")
+            else if (cpuDecision >= 70 && cpuDecision < 81 && cpuPokemon == "bulbasaur")
             {
                 playerHealth = playerHealth - bulbasaur[2];
                 if (playerHealth < 0)
@@ -407,7 +433,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Frenzy Plant and delt {bulbasaur[2]} damage!";
             }
-            else if (cpuDecision <= 60 && cpuPokemon == "squirtle")
+            else if (cpuDecision <= 50 && cpuPokemon == "squirtle")
             {
                 playerHealth = playerHealth - squirtle[0];
                 if (playerHealth < 0)
@@ -416,7 +442,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Bubble and delt {squirtle[0]} damage!";
             }
-            else if (cpuDecision > 60 && cpuDecision < 75 && cpuPokemon == "squirtle")
+            else if (cpuDecision > 50 && cpuDecision < 70 && cpuPokemon == "squirtle")
             {
                 playerHealth = playerHealth - squirtle[1];
                 if (playerHealth < 0)
@@ -425,7 +451,7 @@ namespace FinalProject
                 }
                 battleLabelDescription.Text = $"The opponent used Water Gun and delt {squirtle[1]} damage!";
             }
-            else if (cpuDecision >= 75 && cpuDecision < 81 && cpuPokemon == "squirtle")
+            else if (cpuDecision >= 70 && cpuDecision < 81 && cpuPokemon == "squirtle")
             {
                 playerHealth = playerHealth - squirtle[2];
                 if (playerHealth < 0)
@@ -435,11 +461,11 @@ namespace FinalProject
                 battleLabelDescription.Text = $"The opponent used Hydro Pump and delt {squirtle[2]} damage!";
             }
             else if (cpuDecision > 81 && cpuDecision < 102 && cpuHealth < 500)
-            {          
+            {
                 cpuHealth = 100 + cpuHealth;
                 if (cpuHealth > 500)
                 {
-                    cpuHealth = 500;                  
+                    cpuHealth = 500;
                 }
                 cpuHealthLabel.Text = $"{cpuHealth}";
                 battleLabelDescription.Text = $"The opponent used a potion and regained 100 health!";
@@ -457,9 +483,9 @@ namespace FinalProject
                 startScreen();
                 return;
             }
+            //These display to any move, so I can display this at the bottom. Refresh what is needed.
             playerHealthLabel.Text = $"{playerHealth}";
             player1HealthBar = playerHealth / 500 * 100;
-            Thread.Sleep(1500);
             attack1Button.Visible = false;
             attack2Button.Visible = false;
             attack3Button.Visible = false;
@@ -467,6 +493,9 @@ namespace FinalProject
             fightButton.Visible = true;
             runButton.Visible = true;
             bagButton.Visible = true;
+            battleLabelDescription.Refresh();
+            Thread.Sleep(1500);
+            battleLabelDescription.Text = "";
             attack1Button.Refresh();
             attack2Button.Refresh();
             attack3Button.Refresh();
@@ -486,6 +515,8 @@ namespace FinalProject
 
         private void useButton_Click(object sender, EventArgs e)
         {
+            //The player uses the potion. If the players pokemon has 500 health, the failure message displays and it becomes the cpu turn
+            //If it is less than 500, add 100 health to the players pokemon. If that exceeds 500, set player pokemon health to 500.
             if (playerHealth >= 500)
             {
                 battleLabelDescription.Text = "You already have maximum health!";
@@ -496,7 +527,7 @@ namespace FinalProject
                 attack2Button.Visible = false;
                 attack3Button.Visible = false;
                 fightButton.Visible = false;
-                runButton.Visible = false;          
+                runButton.Visible = false;
                 cpuTurn();
             }
             else if (playerHealth < 500)
@@ -531,7 +562,7 @@ namespace FinalProject
         private void attack1Button_Click(object sender, EventArgs e)
 
         {
-
+            //Depending on which pokemon is active, apply the correct damage and labels of the players pokemon choice.
             if (pokemonChoice == "charmander")
             {
                 cpuHealth = cpuHealth - charmander[0];
@@ -569,8 +600,8 @@ namespace FinalProject
                 battleLabelDescription.Text = $"You used bubble and dealt {squirtle[0]} damage!";
 
             }
-            battleLabelDescription.Visible = true;     
-            attack1Button.Visible = false;         
+            battleLabelDescription.Visible = true;
+            attack1Button.Visible = false;
             attack2Button.Visible = false;
             attack3Button.Visible = false;
             runButton.Visible = false;
@@ -588,13 +619,15 @@ namespace FinalProject
             bagButton.Refresh();
             useButton.Refresh();
             potionBox.Refresh();
-           
+
             Thread.Sleep(1500);
             faintedcpu();
         }
 
         private void attack2Button_Click(object sender, EventArgs e)
         {
+            //With attack 2, theres a chance of missing and criticals. Depending on the players pokemon choice, display correct message and labels
+            //70% of a normal hit, 15% chance of critical hit, 15% of missing
             Random hitChance = new Random();
             int playerHit = hitChance.Next(1, 101);
             if (pokemonChoice == "charmander")
@@ -708,6 +741,7 @@ namespace FinalProject
 
         public void faintedcpu()
         {
+            //Check if the cpu has fainted. If so, display correct messages and go to start screen.
             if (cpuHealth <= 0)
             {
                 battleLabelDescription.Text = "Your Opponent Fainted! You Win The Battle!";
@@ -743,7 +777,7 @@ namespace FinalProject
         {
             if (playerHealth <= 0)
             {
-
+                //If the players health is less than 0, display the game over label and sounds. Pause, then return to start screen
                 battleLabelDescription.Text = "You fainted! Game Over!";
                 pokeMusic = new SoundPlayer(Properties.Resources.loss);
                 pokeMusic.Play();
@@ -767,6 +801,7 @@ namespace FinalProject
         }
         private void attack3Button_Click(object sender, EventArgs e)
         {
+            //Attack 3, does the most damage but the most risk of missing
 
             int playerHit = hitChance.Next(1, 101);
 
@@ -878,6 +913,7 @@ namespace FinalProject
 
         private void playerHealthLabel_Paint(object sender, PaintEventArgs e)
         {
+            //Painting the user and the player health bar. Depending on how much health remains, display the according colour.
             SolidBrush greenBrush = new SolidBrush(Color.Green);
             SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
             SolidBrush orangeBrush = new SolidBrush(Color.Orange);
